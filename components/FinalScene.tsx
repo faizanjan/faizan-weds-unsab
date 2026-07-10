@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { EASE } from "@/lib/animations";
 import { invitation } from "@/data/invitation";
+import { useHost } from "@/lib/useHost";
 import { FloatingPetals } from "@/components/FloatingPetals";
 
 /**
@@ -13,7 +14,9 @@ import { FloatingPetals } from "@/components/FloatingPetals";
  */
 export function FinalScene() {
   const root = useRef<HTMLElement>(null);
-  const { closing, couple } = invitation;
+  const { closing } = invitation;
+  const { rsvp } = useHost();
+  const tel = rsvp.phone.replace(/\s+/g, "");
 
   useGSAP(
     () => {
@@ -56,7 +59,7 @@ export function FinalScene() {
   return (
     <section
       ref={root}
-      className="relative flex min-h-[110svh] w-full flex-col items-center justify-end overflow-hidden"
+      className="relative flex min-h-[72svh] w-full flex-col items-center justify-end overflow-hidden"
       aria-label="Closing"
     >
       {/* Watercolour landscape */}
@@ -182,17 +185,22 @@ export function FinalScene() {
       </svg>
 
       {/* Drifting leaves over the sky */}
-      <FloatingPetals count={9} className="text-sage/50" />
+      <FloatingPetals count={12} className="text-sage/85" />
 
-      {/* Closing message */}
+      {/* Closing message + RSVP */}
       <div className="relative z-10 mb-[8vh] flex flex-col items-center px-6 text-center">
-        <p className="final-reveal font-script text-4xl text-gold sm:text-5xl">
-          {couple[0]} &amp; {couple[1]}
-        </p>
-        <h2 className="final-reveal display mt-8 max-w-[16ch] text-balance text-[clamp(1.9rem,5vw,3.4rem)] leading-tight text-ink">
+        <h2 className="final-reveal display max-w-[16ch] text-balance text-[clamp(1.9rem,5vw,3.4rem)] leading-tight text-ink">
           {closing}
         </h2>
         <span className="final-reveal rule-h mt-10 w-24" />
+        <p className="final-reveal eyebrow mt-10 text-ink-soft/70">RSVP</p>
+        <p className="final-reveal mt-3 text-sm text-ink-soft">{rsvp.name}</p>
+        <a
+          href={`tel:${tel}`}
+          className="final-reveal mt-1 font-serif text-lg text-ink transition-colors hover:text-gold-deep"
+        >
+          {rsvp.phone}
+        </a>
       </div>
     </section>
   );

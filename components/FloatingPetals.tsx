@@ -13,55 +13,57 @@ const LEAF_PATH =
   "M12 0 C 4 6, 2 16, 8 23 C 10 25, 14 25, 16 23 C 22 16, 20 6, 12 0 Z";
 
 /**
- * Chinar leaves drifting slowly on an imagined breeze. Each leaf gets its own
- * organic path via GSAP so the motion never looks looped. Respects
- * reduced-motion by rendering nothing.
+ * Chinar leaves floating on an imagined breeze in the open sky above the
+ * closing message. Each leaf wanders its own way — independent horizontal and
+ * vertical bobbing at different speeds so the drift never looks looped — while
+ * staying in the upper region. Respects reduced-motion by rendering nothing.
  */
-export function FloatingPetals({ count = 10, className }: FloatingPetalsProps) {
+export function FloatingPetals({ count = 12, className }: FloatingPetalsProps) {
   const root = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
       const leaves = gsap.utils.toArray<HTMLElement>(".petal", root.current);
+      const rand = gsap.utils.random;
 
-      leaves.forEach((leaf, i) => {
-        const startX = gsap.utils.random(0, 100);
+      leaves.forEach((leaf) => {
+        // Scatter across the sky, kept above where the closing text sits, with
+        // enough margin that the vertical bob never clips at the top edge.
         gsap.set(leaf, {
-          left: `${startX}%`,
-          top: `${gsap.utils.random(-10, 100)}%`,
-          scale: gsap.utils.random(0.5, 1.1),
-          rotation: gsap.utils.random(0, 360),
-          opacity: gsap.utils.random(0.25, 0.6),
+          left: `${rand(5, 95)}%`,
+          top: `${rand(12, 42)}%`,
+          scale: rand(0.6, 1.15),
+          rotation: rand(0, 360),
+          opacity: rand(0.4, 0.75),
         });
 
-        // Vertical drift down and off-screen, then recycle to the top.
+        // Wander horizontally and vertically on separate clocks so each leaf
+        // traces a slow, organic float rather than a straight line.
         gsap.to(leaf, {
-          yPercent: 900,
-          duration: gsap.utils.random(18, 34),
-          ease: "none",
-          repeat: -1,
-          delay: i * 0.6,
-          modifiers: {
-            yPercent: gsap.utils.unitize((v) => parseFloat(v) % 1000),
-          },
-        });
-
-        // Gentle sideways sway.
-        gsap.to(leaf, {
-          xPercent: gsap.utils.random(-160, 160),
-          duration: gsap.utils.random(6, 11),
+          x: rand(-140, 140),
+          duration: rand(7, 12),
           ease: "sine.inOut",
           repeat: -1,
           yoyo: true,
+          delay: rand(0, 2.5),
+        });
+        gsap.to(leaf, {
+          y: rand(-55, 55),
+          duration: rand(6, 10),
+          ease: "sine.inOut",
+          repeat: -1,
+          yoyo: true,
+          delay: rand(0, 2.5),
         });
 
-        // Slow tumble.
+        // Lazy back-and-forth tilt.
         gsap.to(leaf, {
-          rotation: `+=${gsap.utils.random(180, 420)}`,
-          duration: gsap.utils.random(10, 20),
-          ease: "none",
+          rotation: `+=${rand(-70, 70)}`,
+          duration: rand(9, 16),
+          ease: "sine.inOut",
           repeat: -1,
+          yoyo: true,
         });
       });
     },

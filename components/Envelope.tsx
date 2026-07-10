@@ -24,7 +24,7 @@ export function Envelope() {
       const q = gsap.utils.selector(root);
 
       // Resting/initial state before the scene is scrolled into.
-      gsap.set(q(".envelope"), { y: 130, autoAlpha: 0, scale: 0.92 });
+      gsap.set(q(".envelope"), { y: 80, autoAlpha: 0, scale: 0.94 });
       gsap.set(q(".env-shadow"), { autoAlpha: 0, scale: 0.6 });
       // Letter sits low and invisible; it fades in as it's drawn upward,
       // reading as the card being lifted clear of the envelope.
@@ -37,13 +37,13 @@ export function Envelope() {
       const tl = createScrubTimeline({
         trigger: root.current!,
         pin: q(".env-pin")[0],
-        scrub: 1,
+        scrub: 0.6,
         defaults: { ease: "none" },
       });
 
-      // 1 — Rise into view
-      tl.to(q(".envelope"), { y: 0, autoAlpha: 1, scale: 1, duration: 1.4 }, 0)
-        .to(q(".env-shadow"), { autoAlpha: 1, scale: 1, duration: 1.4 }, 0)
+      // 1 — Rise into view, quickly, so the scene never reads as empty
+      tl.to(q(".envelope"), { y: 0, autoAlpha: 1, scale: 1, duration: 0.7 }, 0)
+        .to(q(".env-shadow"), { autoAlpha: 1, scale: 1, duration: 0.7 }, 0)
         // 2 — Hold + subtle push toward camera as the seal is admired
         .to(q(".envelope"), { scale: 1.04, duration: 1 }, 1.6)
         // 3 — Seal cracks apart

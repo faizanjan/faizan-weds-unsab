@@ -452,13 +452,13 @@ html.lenis body {
   will-change: transform;
 }
 .ripple-1 {
-  animation: ripple-drift 9s linear infinite;
+  animation: ripple-drift 4.5s linear infinite;
 }
 .ripple-2 {
-  animation: ripple-drift 13s linear infinite reverse;
+  animation: ripple-drift 6.5s linear infinite reverse;
 }
 .ripple-3 {
-  animation: ripple-drift 17s linear infinite;
+  animation: ripple-drift 8.5s linear infinite;
 }
 @keyframes ripple-drift {
   from {
@@ -469,7 +469,7 @@ html.lenis body {
   }
 }
 .shikara {
-  animation: shikara-bob 7s ease-in-out infinite;
+  animation: shikara-bob 4s ease-in-out infinite;
   transform-box: fill-box;
   transform-origin: center;
 }

@@ -50,7 +50,8 @@ export interface Invitation {
 export const invitation: Invitation = {
   couple: ["Faizan", "Unsab"],
   conjunction: "&",
-  tagline: "Where the mountains meet the lake, our forever begins.",
+  tagline:
+    "Of all the lives we could have lived, we chose to spend this one together.",
   blessing:
     "With blessings and joy, we cordially invite you to celebrate the wedding of",
   groom: {
@@ -86,14 +87,12 @@ export const invitation: Invitation = {
       mapsLink: "https://maps.google.com/?q=34.12137781298244,74.88477008173105",
       rsvp: { name: "Jibran Jan", phone: "+91 91031 71780" },
     },
-    // TODO(bride): replace map + RSVP with the bride family's real values.
-    // Currently reusing the groom's map/contact as placeholders.
     bride: {
       addressLines: ["Chanapura, Lone Mawla", "Srinagar, J&K"],
       mapsEmbedUrl:
-        "https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d648.3379576837558!2d74.88477008173105!3d34.12137781298244!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMzTCsDA3JzE2LjIiTiA3NMKwNTMnMDguNyJF!5e0!3m2!1sen!2sin!4v1783601594708!5m2!1sen!2sin",
-      mapsLink: "https://maps.google.com/?q=34.12137781298244,74.88477008173105",
-      rsvp: { name: "Jibran Jan", phone: "+91 91031 71780" },
+        "https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d312.0973076152025!2d74.81251561102381!3d34.04119051482368!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMzTCsDAyJzI4LjMiTiA3NMKwNDgnNDYuMSJF!5e0!3m2!1sen!2sin!4v1783703656867!5m2!1sen!2sin",
+      mapsLink: "https://maps.google.com/?q=34.04119051482368,74.81251561102381",
+      rsvp: { name: "Ghaamiz", phone: "+91 70061 51402" },
     },
   },
   closing: "We look forward to celebrating with you.",
