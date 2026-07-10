@@ -25,7 +25,7 @@ const greatVibes = Great_Vibes({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://faizan-unsab.wedding"),
+  metadataBase: new URL("https://faizanjan.github.io"),
   title: "Faizan & Unsab — A Wedding Invitation",
   description:
     "With blessings and joy, we cordially invite you to celebrate our wedding in Srinagar, Kashmir — 26 & 27 September 2026.",
