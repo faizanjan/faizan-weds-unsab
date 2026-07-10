@@ -1,0 +1,523 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   Design tokens — luxury wedding invitation
+   ========================================================================== */
+:root {
+  /* Palette */
+  --color-ivory: #f7f3ed;
+  --color-paper: #fffdf8;
+  --color-gold: #c8a96a;
+  --color-gold-deep: #a8843f;
+  --color-gold-light: #e6d4a8;
+  --color-ink: #2f2f2f;
+  --color-ink-soft: #5a564f;
+  --color-sage: #6d7d6e;
+  --color-blush: #e9d7cf;
+
+  /* Elevation */
+  --shadow-paper: 0 1px 2px rgba(47, 47, 47, 0.04),
+    0 8px 24px rgba(47, 47, 47, 0.08), 0 24px 64px rgba(47, 47, 47, 0.06);
+  --shadow-envelope: 0 30px 80px -20px rgba(47, 47, 47, 0.35),
+    0 10px 30px -10px rgba(47, 47, 47, 0.2);
+  --shadow-lift: 0 40px 120px -30px rgba(47, 47, 47, 0.28);
+
+  /* Rhythm */
+  --measure: 62ch;
+  --ease-luxe: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Subtle fibrous paper grain (fractal noise, near-invisible) */
+  --paper-noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
+}
+
+/* Tailwind theme bridge — exposes tokens as utilities (bg-ivory, text-gold, …) */
+@theme inline {
+  --color-ivory: var(--color-ivory);
+  --color-paper: var(--color-paper);
+  --color-gold: var(--color-gold);
+  --color-gold-deep: var(--color-gold-deep);
+  --color-gold-light: var(--color-gold-light);
+  --color-ink: var(--color-ink);
+  --color-ink-soft: var(--color-ink-soft);
+  --color-sage: var(--color-sage);
+  --color-blush: var(--color-blush);
+
+  --font-serif: var(--font-cormorant);
+  --font-sans: var(--font-inter);
+  --font-script: var(--font-great-vibes);
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  /* Lenis drives scroll; keep native smooth off to avoid double easing */
+  scroll-behavior: auto;
+}
+
+body {
+  background-color: var(--color-ivory);
+  color: var(--color-ink);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-feature-settings: "liga" 1, "calt" 1;
+  overflow-x: hidden;
+  text-rendering: optimizeLegibility;
+}
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   Typography primitives
+   ========================================================================== */
+.font-serif {
+  font-family: var(--font-serif), Georgia, serif;
+}
+.font-script {
+  font-family: var(--font-script), cursive;
+}
+
+.display {
+  font-family: var(--font-serif), Georgia, serif;
+  font-weight: 300;
+  line-height: 0.98;
+  letter-spacing: -0.01em;
+}
+
+.eyebrow {
+  font-family: var(--font-sans), sans-serif;
+  font-weight: 400;
+  font-size: clamp(0.62rem, 0.9vw, 0.72rem);
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--color-gold-deep);
+}
+
+.lede {
+  font-family: var(--font-sans), sans-serif;
+  font-weight: 300;
+  line-height: 1.75;
+  color: var(--color-ink-soft);
+}
+
+/* Thin gold hairline used as a section motif */
+.rule {
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--color-gold) 30%,
+    var(--color-gold) 70%,
+    transparent
+  );
+}
+.rule-h {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--color-gold) 30%,
+    var(--color-gold) 70%,
+    transparent
+  );
+}
+
+/* Gold foil text — subtle sheen, no gaudiness */
+.foil {
+  background: linear-gradient(
+    100deg,
+    var(--color-gold-deep) 0%,
+    var(--color-gold) 35%,
+    var(--color-gold-light) 50%,
+    var(--color-gold) 65%,
+    var(--color-gold-deep) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Paper grain — layered over paper surfaces */
+.paper-grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+  background-image: var(--paper-noise);
+  background-size: 220px 220px;
+}
+
+
+/* Hero scroll indicator — a bead of light falling down a hairline */
+.scroll-bead {
+  animation: bead-fall 2.4s var(--ease-luxe) infinite;
+}
+@keyframes bead-fall {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(400%);
+    opacity: 0;
+  }
+}
+
+/* ==========================================================================
+   Envelope — built entirely from layered HTML/CSS (no images)
+   ========================================================================== */
+.env-stage {
+  perspective: 1800px;
+  perspective-origin: 50% 42%;
+}
+
+.envelope {
+  position: relative;
+  width: min(86vw, 440px);
+  aspect-ratio: 3 / 2;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* Soft cast shadow on the ground */
+.env-shadow {
+  position: absolute;
+  left: 50%;
+  bottom: -8%;
+  width: 84%;
+  height: 16%;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(47, 47, 47, 0.28),
+    rgba(47, 47, 47, 0) 70%
+  );
+  filter: blur(6px);
+  z-index: 0;
+}
+
+/* Back paper — the body of the envelope, with thickness on the lower edge */
+.env-back {
+  position: absolute;
+  inset: 0;
+  border-radius: 6px;
+  background: linear-gradient(160deg, #fffdf8 0%, #f4ecdd 100%);
+  box-shadow: var(--shadow-envelope),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  z-index: 1;
+}
+
+/* The letter/card tucked inside, which later rises out */
+.env-letter {
+  position: absolute;
+  left: 50%;
+  bottom: 6%;
+  width: 90%;
+  height: 122%;
+  transform: translateX(-50%);
+  transform-origin: bottom center;
+  border-radius: 4px;
+  background: linear-gradient(175deg, #fffefb 0%, #fbf6ec 100%);
+  box-shadow: 0 -2px 6px rgba(47, 47, 47, 0.06),
+    0 18px 50px -18px rgba(47, 47, 47, 0.4),
+    inset 0 0 0 1px rgba(200, 169, 106, 0.28);
+  z-index: 2;
+  overflow: hidden;
+}
+
+/* thin gold foil inner frame on the letter */
+.env-letter::after {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border: 1px solid rgba(200, 169, 106, 0.4);
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+/* Front pocket — trapezoid with a V-notch, sits over the letter's base */
+.env-front {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: linear-gradient(165deg, #fbf5e9 0%, #efe4d0 100%);
+  clip-path: polygon(0 38%, 50% 74%, 100% 38%, 100% 100%, 0 100%);
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.6);
+  border-radius: 0 0 6px 6px;
+}
+/* seams catching light along the pocket diagonals */
+.env-front::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(0 38%, 50% 74%, 100% 38%, 50% 76%);
+  background: linear-gradient(
+    to bottom,
+    rgba(200, 169, 106, 0.35),
+    rgba(200, 169, 106, 0)
+  );
+}
+
+/* Top flap — closed triangle; opens by rotating back on the X axis */
+.env-flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 62%;
+  z-index: 4;
+  transform-origin: top center;
+  transform: rotateX(0deg);
+  transform-style: preserve-3d;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+.env-flap-face {
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  background: linear-gradient(160deg, #fdfaf3 0%, #f4ead4 55%, #ecdfc7 100%);
+  box-shadow: 0 6px 14px -6px rgba(47, 47, 47, 0.3);
+  overflow: hidden;
+  backface-visibility: hidden;
+}
+/* underside of the flap, visible once opened — darker toward the fold for depth */
+.env-flap-back {
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  background: linear-gradient(0deg, #f4ead8 0%, #e4d4b8 62%, #d9c6a2 100%);
+  transform: rotateX(180deg);
+  backface-visibility: hidden;
+  overflow: hidden;
+}
+/* soft inner shading on the opened underside so the fold reads with depth */
+.env-flap-back::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  background: linear-gradient(
+    0deg,
+    rgba(90, 66, 24, 0) 40%,
+    rgba(90, 66, 24, 0.22) 100%
+  );
+}
+/* movable specular sheen that sweeps across the flap as it opens (GSAP-driven) */
+.env-flap-sheen {
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  background: linear-gradient(
+    115deg,
+    rgba(255, 255, 255, 0) 38%,
+    rgba(255, 255, 255, 0.78) 50%,
+    rgba(255, 255, 255, 0) 62%
+  );
+  mix-blend-mode: screen;
+  opacity: 0;
+  pointer-events: none;
+}
+/* movable sheen that glides across the letter face as it's drawn out */
+.env-letter-sheen {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  background: linear-gradient(
+    110deg,
+    rgba(255, 255, 255, 0) 40%,
+    rgba(255, 255, 255, 0.6) 50%,
+    rgba(255, 255, 255, 0) 60%
+  );
+  mix-blend-mode: screen;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Wax seal — sits where the flap tip meets the pocket */
+.env-seal {
+  position: absolute;
+  left: 50%;
+  top: 58%;
+  width: clamp(52px, 14%, 78px);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  transform-style: preserve-3d;
+  z-index: 5;
+}
+.env-seal-half {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 38% 32%,
+    #d8b878 0%,
+    #c8a96a 30%,
+    #a8843f 78%,
+    #8a6a2e 100%
+  );
+  box-shadow: inset 0 2px 6px rgba(255, 255, 255, 0.35),
+    inset 0 -3px 8px rgba(0, 0, 0, 0.35), 0 6px 14px -4px rgba(120, 90, 30, 0.55);
+}
+.env-seal-half.right {
+  clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%);
+}
+.env-seal-half.left {
+  clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);
+}
+.env-seal-mono {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-serif), serif;
+  font-size: clamp(1rem, 3.4vw, 1.5rem);
+  color: rgba(74, 54, 20, 0.8);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.28);
+  pointer-events: none;
+}
+/* travelling glint across the seal */
+.env-seal-glint {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  z-index: 6;
+  pointer-events: none;
+}
+.env-seal-glint::after {
+  content: "";
+  position: absolute;
+  top: -30%;
+  left: -60%;
+  width: 40%;
+  height: 160%;
+  background: linear-gradient(
+    100deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.85) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(18deg);
+  animation: seal-glint 4.5s ease-in-out infinite;
+}
+@keyframes seal-glint {
+  0%,
+  62% {
+    left: -60%;
+    opacity: 0;
+  }
+  70% {
+    opacity: 1;
+  }
+  86% {
+    left: 130%;
+    opacity: 0;
+  }
+  100% {
+    left: 130%;
+    opacity: 0;
+  }
+}
+
+/* ==========================================================================
+   Final scene — water ripples & shikara
+   ========================================================================== */
+.ripple {
+  will-change: transform;
+}
+.ripple-1 {
+  animation: ripple-drift 9s linear infinite;
+}
+.ripple-2 {
+  animation: ripple-drift 13s linear infinite reverse;
+}
+.ripple-3 {
+  animation: ripple-drift 17s linear infinite;
+}
+@keyframes ripple-drift {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(320px);
+  }
+}
+.shikara {
+  animation: shikara-bob 7s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+@keyframes shikara-bob {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-0.6deg);
+  }
+  50% {
+    transform: translateY(5px) rotate(0.6deg);
+  }
+}
+
+/* ==========================================================================
+   Hero — fairy-light bulbs on the hanging garland
+   ========================================================================== */
+.fairy-bulb {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #fff2cf 0%, #e9c67d 55%, #c8a96a 100%);
+  box-shadow: 0 0 6px 1px rgba(233, 198, 125, 0.75),
+    0 0 12px 3px rgba(200, 169, 106, 0.35);
+  animation: bulb-twinkle 2.8s ease-in-out infinite;
+}
+@keyframes bulb-twinkle {
+  0%,
+  100% {
+    opacity: 0.5;
+    box-shadow: 0 0 4px 1px rgba(233, 198, 125, 0.5);
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 8px 2px rgba(233, 198, 125, 0.85),
+      0 0 16px 4px rgba(200, 169, 106, 0.4);
+  }
+}
+
+::selection {
+  background: var(--color-gold-light);
+  color: var(--color-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
