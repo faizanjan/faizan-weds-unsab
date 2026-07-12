@@ -1,21 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { invitation, type Host } from "@/data/invitation";
+import type { Host } from "@/data/invitation";
+import { useInviteParams } from "@/lib/useInviteParams";
 
 /**
- * The invitation is one card shared by both families. Opening it with `?B=T`
- * (B = bride, T = true) swaps in the bride's residence, map, and RSVP contact.
- * The param is read only after mount so the static markup never disagrees with
- * the server render.
+ * Convenience wrapper around {@link useInviteParams} for scenes that only need
+ * the active host (groom by default, bride when opened with `?B=T`).
  */
 export function useHost(): Host {
-  const [isBride, setIsBride] = useState(false);
-
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    setIsBride(params.get("B") === "T");
-  }, []);
-
-  return isBride ? invitation.hosts.bride : invitation.hosts.groom;
+  return useInviteParams().host;
 }

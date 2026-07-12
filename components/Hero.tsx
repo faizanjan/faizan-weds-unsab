@@ -6,6 +6,7 @@ import { EASE } from "@/lib/animations";
 import { Particles } from "@/components/Particles";
 import { HangingLights } from "@/components/HangingLights";
 import { invitation } from "@/data/invitation";
+import { useInviteParams } from "@/lib/useInviteParams";
 
 /**
  * Scene 1 — the opening. A near-empty ivory field lit from the top-left,
@@ -15,6 +16,7 @@ import { invitation } from "@/data/invitation";
 export function Hero() {
   const root = useRef<HTMLElement>(null);
   const [first, second] = invitation.couple;
+  const { guestName } = useInviteParams();
 
   useGSAP(
     () => {
@@ -81,7 +83,16 @@ export function Hero() {
       <HangingLights />
 
       <div className="hero-content relative z-10 flex h-full flex-col items-center justify-center px-6 text-center">
-        <p className="hero-eyebrow eyebrow mb-10">The Wedding Of</p>
+        {guestName ? (
+          <div className="hero-eyebrow mb-10 flex flex-col items-center">
+            <p className="font-script text-3xl text-gold sm:text-4xl">
+              Dear {guestName},
+            </p>
+            <p className="eyebrow mt-4">you are invited to the wedding of</p>
+          </div>
+        ) : (
+          <p className="hero-eyebrow eyebrow mb-10">The Wedding Of</p>
+        )}
 
         <h1 className="display flex flex-col items-center text-ink">
           <span className="hero-name text-[clamp(3rem,11vw,8.5rem)]">
@@ -103,12 +114,24 @@ export function Hero() {
         </p>
 
         <div className="hero-scroll absolute bottom-10 flex flex-col items-center gap-3">
-          <span className="eyebrow text-[0.6rem] tracking-[0.4em] text-ink-soft">
-            Scroll
-          </span>
+          <span className="sr-only">Scroll down</span>
           <span className="relative flex h-12 w-[1px] overflow-hidden bg-gold/30">
             <span className="scroll-bead absolute left-0 top-0 h-3 w-full bg-gold" />
           </span>
+          <svg
+            className="scroll-cue h-4 w-4 text-gold/80"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M5 8.5l7 7 7-7"
+              stroke="currentColor"
+              strokeWidth="1.4"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
         </div>
       </div>
     </section>

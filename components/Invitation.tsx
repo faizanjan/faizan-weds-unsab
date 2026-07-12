@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { EASE } from "@/lib/animations";
 import { invitation } from "@/data/invitation";
+import { useInviteParams } from "@/lib/useInviteParams";
 import { FloralCorner } from "@/components/ornaments/FloralCorner";
 import { FloralDivider } from "@/components/ornaments/FloralDivider";
 
@@ -14,6 +15,13 @@ import { FloralDivider } from "@/components/ornaments/FloralDivider";
 export function Invitation() {
   const root = useRef<HTMLElement>(null);
   const { blessing, groom, bride, functions } = invitation;
+  const { showMehndi } = useInviteParams();
+
+  // Not everyone invited to the Reception is invited to the Mehndi; `?m=f`
+  // drops it so those guests never see an event they aren't part of.
+  const visibleFunctions = functions.filter(
+    (fn) => showMehndi || fn.name !== "Mehndi"
+  );
 
   useGSAP(
     () => {
@@ -97,8 +105,14 @@ export function Invitation() {
           <FloralDivider className="invite-reveal my-12" />
 
           {/* Functions */}
-          <div className="invite-reveal grid grid-cols-1 gap-10 sm:grid-cols-2">
-            {functions.map((fn) => (
+          <div
+            className={`invite-reveal grid grid-cols-1 gap-10 ${
+              visibleFunctions.length > 1
+                ? "sm:grid-cols-2"
+                : "mx-auto max-w-xs"
+            }`}
+          >
+            {visibleFunctions.map((fn) => (
               <div key={fn.name} className="flex flex-col items-center">
                 <p className="eyebrow text-gold-deep">{fn.day}</p>
                 <h3 className="display mt-3 text-3xl text-ink sm:text-4xl">

@@ -168,6 +168,22 @@ html.lenis body {
 .scroll-bead {
   animation: bead-fall 2.4s var(--ease-luxe) infinite;
 }
+
+/* Wordless scroll cue — a chevron that gently bobs downward */
+.scroll-cue {
+  animation: cue-bob 1.8s var(--ease-luxe) infinite;
+}
+@keyframes cue-bob {
+  0%,
+  100% {
+    transform: translateY(-2px);
+    opacity: 0.45;
+  }
+  50% {
+    transform: translateY(3px);
+    opacity: 1;
+  }
+}
 @keyframes bead-fall {
   0% {
     transform: translateY(-100%);
@@ -366,6 +382,13 @@ html.lenis body {
   transform: translate(-50%, -50%);
   transform-style: preserve-3d;
   z-index: 5;
+  cursor: pointer;
+  transition: filter 0.3s ease;
+}
+@media (hover: hover) {
+  .env-seal:hover {
+    filter: brightness(1.06) saturate(1.05);
+  }
 }
 .env-seal-half {
   position: absolute;

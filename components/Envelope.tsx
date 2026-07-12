@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { createScrubTimeline } from "@/lib/animations";
+import { smoothScrollTo } from "@/lib/smoothScroll";
 import { invitation } from "@/data/invitation";
 import { FloralCorner } from "@/components/ornaments/FloralCorner";
 import { FloralDivider } from "@/components/ornaments/FloralDivider";
@@ -17,7 +18,16 @@ import { FloralDivider } from "@/components/ornaments/FloralDivider";
  */
 export function Envelope() {
   const root = useRef<HTMLDivElement>(null);
+  const tlRef = useRef<gsap.core.Timeline | null>(null);
   const [first, second] = invitation.couple;
+
+  // Tapping the seal advances the scroll to the point where the card is fully
+  // out — same timeline, so click and scroll can't disagree.
+  const openInvitation = () => {
+    const st = tlRef.current?.scrollTrigger;
+    if (!st) return;
+    smoothScrollTo(st.start + (st.end - st.start) * 0.92);
+  };
 
   useGSAP(
     () => {
@@ -40,24 +50,29 @@ export function Envelope() {
         scrub: 0.6,
         defaults: { ease: "none" },
       });
+      tlRef.current = tl;
+
+      // Scroll/tap hint — present from the moment the envelope pins, fading as
+      // the flap lifts so it never lingers over the open card.
+      tl.to(q(".env-hint"), { autoAlpha: 0, duration: 0.6 }, 1.4);
 
       // 1 — Rise into view, quickly, so the scene never reads as empty
       tl.to(q(".envelope"), { y: 0, autoAlpha: 1, scale: 1, duration: 0.7 }, 0)
         .to(q(".env-shadow"), { autoAlpha: 1, scale: 1, duration: 0.7 }, 0)
-        // 2 — Hold + subtle push toward camera as the seal is admired
-        .to(q(".envelope"), { scale: 1.04, duration: 1 }, 1.6)
+        // 2 — A subtle push toward camera, straight into the reveal
+        .to(q(".envelope"), { scale: 1.04, duration: 1 }, 0.6)
         // 3 — Seal cracks apart
         .to(
           q(".env-seal-half.left"),
           { xPercent: -32, rotate: -12, autoAlpha: 0.9, duration: 0.8 },
-          2.8
+          1.8
         )
         .to(
           q(".env-seal-half.right"),
           { xPercent: 32, rotate: 12, autoAlpha: 0.9, duration: 0.8 },
-          2.8
+          1.8
         )
-        .to(q(".env-seal"), { autoAlpha: 0, duration: 0.5 }, 3.5)
+        .to(q(".env-seal"), { autoAlpha: 0, duration: 0.5 }, 2.5)
         // 4 — Flap cracks open just enough to read as unsealed, catching a
         // specular sheen, then dissolves as the card rises. Rotating it any
         // further would throw a full triangle into the empty space above the
@@ -66,49 +81,49 @@ export function Envelope() {
         .to(
           q(".env-flap"),
           { rotateX: -46, duration: 1, ease: "power2.out" },
-          3.2
+          2.2
         )
-        .to(q(".env-flap-sheen"), { opacity: 1, duration: 0.2 }, 3.3)
+        .to(q(".env-flap-sheen"), { opacity: 1, duration: 0.2 }, 2.3)
         .to(
           q(".env-flap-sheen"),
           { xPercent: 140, duration: 0.9, ease: "power1.inOut" },
-          3.35
+          2.35
         )
-        .to(q(".env-flap-sheen"), { opacity: 0, duration: 0.2 }, 4.0)
+        .to(q(".env-flap-sheen"), { opacity: 0, duration: 0.2 }, 3.0)
         // Flap tips a touch further and fades out as the card emerges past it.
         .to(
           q(".env-flap"),
           { autoAlpha: 0, rotateX: -64, duration: 1.1, ease: "power1.in" },
-          4.0
+          3.0
         )
         // 5 — Letter is drawn up and fades into view
         .to(
           q(".env-letter"),
           { autoAlpha: 1, yPercent: -12, duration: 1.8, ease: "power2.inOut" },
-          4.1
+          3.1
         )
         // Sheen sweeps across the card face as it clears the pocket.
-        .to(q(".env-letter-sheen"), { opacity: 1, duration: 0.25 }, 4.5)
+        .to(q(".env-letter-sheen"), { opacity: 1, duration: 0.25 }, 3.5)
         .to(
           q(".env-letter-sheen"),
           { xPercent: 130, duration: 1.1, ease: "power1.inOut" },
-          4.55
+          3.55
         )
-        .to(q(".env-letter-sheen"), { opacity: 0, duration: 0.3 }, 5.45)
-        .to(q(".env-letter-body"), { autoAlpha: 1, duration: 0.6 }, 4.9)
+        .to(q(".env-letter-sheen"), { opacity: 0, duration: 0.3 }, 4.45)
+        .to(q(".env-letter-body"), { autoAlpha: 1, duration: 0.6 }, 3.9)
         // 6 — Camera draws closer; pocket + flap recede so the card is clean
-        .to(q(".envelope"), { scale: 1.42, y: 0, duration: 1.6 }, 5.4)
+        .to(q(".envelope"), { scale: 1.42, y: 0, duration: 1.6 }, 4.4)
         .to(
           q(".env-front, .env-flap, .env-shadow, .env-back"),
           { autoAlpha: 0, duration: 1 },
-          5.6
+          4.6
         );
     },
     { scope: root }
   );
 
   return (
-    <div ref={root} className="relative h-[420vh] w-full">
+    <div ref={root} className="relative h-[150vh] w-full">
       <div className="env-pin relative flex h-[100svh] w-full items-center justify-center overflow-hidden">
         <div className="env-stage flex h-full w-full items-center justify-center">
           <div className="envelope">
@@ -152,8 +167,20 @@ export function Envelope() {
               <div className="env-flap-back" />
             </div>
 
-            {/* Wax seal */}
-            <div className="env-seal" aria-hidden="true">
+            {/* Wax seal — also a tap target that opens the invitation */}
+            <div
+              className="env-seal"
+              role="button"
+              tabIndex={0}
+              aria-label="Open the invitation"
+              onClick={openInvitation}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  openInvitation();
+                }
+              }}
+            >
               <div className="env-seal-half left" />
               <div className="env-seal-half right" />
               <span className="env-seal-mono">
@@ -162,6 +189,28 @@ export function Envelope() {
               <div className="env-seal-glint" />
             </div>
           </div>
+        </div>
+
+        {/* Scroll / tap hint, pinned to the stage so it holds if they pause */}
+        <div className="env-hint pointer-events-none absolute bottom-8 left-1/2 z-20 flex -translate-x-1/2 flex-col items-center gap-3">
+          <span className="sr-only">Tap the seal or scroll to open</span>
+          <span className="relative flex h-12 w-[1px] overflow-hidden bg-gold/30">
+            <span className="scroll-bead absolute left-0 top-0 h-3 w-full bg-gold" />
+          </span>
+          <svg
+            className="scroll-cue h-4 w-4 text-gold/80"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M5 8.5l7 7 7-7"
+              stroke="currentColor"
+              strokeWidth="1.4"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
         </div>
       </div>
     </div>
