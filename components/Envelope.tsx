@@ -33,9 +33,10 @@ export function Envelope() {
     () => {
       const q = gsap.utils.selector(root);
 
-      // Resting/initial state before the scene is scrolled into.
-      gsap.set(q(".envelope"), { y: 80, autoAlpha: 0, scale: 0.94 });
-      gsap.set(q(".env-shadow"), { autoAlpha: 0, scale: 0.6 });
+      // The envelope rests fully visible so it's already on screen as the
+      // section scrolls up behind the departing hero — no blank ivory gap.
+      gsap.set(q(".envelope"), { y: 0, autoAlpha: 1, scale: 1 });
+      gsap.set(q(".env-shadow"), { autoAlpha: 1, scale: 1 });
       // Letter sits low and invisible; it fades in as it's drawn upward,
       // reading as the card being lifted clear of the envelope.
       gsap.set(q(".env-letter"), { yPercent: 52, autoAlpha: 0, zIndex: 9 });
@@ -54,25 +55,22 @@ export function Envelope() {
 
       // Scroll/tap hint — present from the moment the envelope pins, fading as
       // the flap lifts so it never lingers over the open card.
-      tl.to(q(".env-hint"), { autoAlpha: 0, duration: 0.6 }, 1.4);
+      tl.to(q(".env-hint"), { autoAlpha: 0, duration: 0.6 }, 0.8);
 
-      // 1 — Rise into view, quickly, so the scene never reads as empty
-      tl.to(q(".envelope"), { y: 0, autoAlpha: 1, scale: 1, duration: 0.7 }, 0)
-        .to(q(".env-shadow"), { autoAlpha: 1, scale: 1, duration: 0.7 }, 0)
-        // 2 — A subtle push toward camera, straight into the reveal
-        .to(q(".envelope"), { scale: 1.04, duration: 1 }, 0.6)
-        // 3 — Seal cracks apart
+      // 1 — A subtle push toward camera as the sealed envelope settles in
+      tl.to(q(".envelope"), { scale: 1.04, duration: 1 }, 0)
+        // 2 — Seal cracks apart
         .to(
           q(".env-seal-half.left"),
           { xPercent: -32, rotate: -12, autoAlpha: 0.9, duration: 0.8 },
-          1.8
+          1.2
         )
         .to(
           q(".env-seal-half.right"),
           { xPercent: 32, rotate: 12, autoAlpha: 0.9, duration: 0.8 },
-          1.8
+          1.2
         )
-        .to(q(".env-seal"), { autoAlpha: 0, duration: 0.5 }, 2.5)
+        .to(q(".env-seal"), { autoAlpha: 0, duration: 0.5 }, 1.9)
         // 4 — Flap cracks open just enough to read as unsealed, catching a
         // specular sheen, then dissolves as the card rises. Rotating it any
         // further would throw a full triangle into the empty space above the
@@ -81,49 +79,49 @@ export function Envelope() {
         .to(
           q(".env-flap"),
           { rotateX: -46, duration: 1, ease: "power2.out" },
-          2.2
+          1.6
         )
-        .to(q(".env-flap-sheen"), { opacity: 1, duration: 0.2 }, 2.3)
+        .to(q(".env-flap-sheen"), { opacity: 1, duration: 0.2 }, 1.7)
         .to(
           q(".env-flap-sheen"),
           { xPercent: 140, duration: 0.9, ease: "power1.inOut" },
-          2.35
+          1.75
         )
-        .to(q(".env-flap-sheen"), { opacity: 0, duration: 0.2 }, 3.0)
+        .to(q(".env-flap-sheen"), { opacity: 0, duration: 0.2 }, 2.4)
         // Flap tips a touch further and fades out as the card emerges past it.
         .to(
           q(".env-flap"),
           { autoAlpha: 0, rotateX: -64, duration: 1.1, ease: "power1.in" },
-          3.0
+          2.4
         )
         // 5 — Letter is drawn up and fades into view
         .to(
           q(".env-letter"),
           { autoAlpha: 1, yPercent: -12, duration: 1.8, ease: "power2.inOut" },
-          3.1
+          2.5
         )
         // Sheen sweeps across the card face as it clears the pocket.
-        .to(q(".env-letter-sheen"), { opacity: 1, duration: 0.25 }, 3.5)
+        .to(q(".env-letter-sheen"), { opacity: 1, duration: 0.25 }, 2.9)
         .to(
           q(".env-letter-sheen"),
           { xPercent: 130, duration: 1.1, ease: "power1.inOut" },
-          3.55
+          2.95
         )
-        .to(q(".env-letter-sheen"), { opacity: 0, duration: 0.3 }, 4.45)
-        .to(q(".env-letter-body"), { autoAlpha: 1, duration: 0.6 }, 3.9)
+        .to(q(".env-letter-sheen"), { opacity: 0, duration: 0.3 }, 3.85)
+        .to(q(".env-letter-body"), { autoAlpha: 1, duration: 0.6 }, 3.3)
         // 6 — Camera draws closer; pocket + flap recede so the card is clean
-        .to(q(".envelope"), { scale: 1.42, y: 0, duration: 1.6 }, 4.4)
+        .to(q(".envelope"), { scale: 1.42, y: 0, duration: 1.6 }, 3.8)
         .to(
           q(".env-front, .env-flap, .env-shadow, .env-back"),
           { autoAlpha: 0, duration: 1 },
-          4.6
+          4.0
         );
     },
     { scope: root }
   );
 
   return (
-    <div ref={root} className="relative h-[150vh] w-full">
+    <div ref={root} className="relative h-[220vh] w-full">
       <div className="env-pin relative flex h-[100svh] w-full items-center justify-center overflow-hidden">
         <div className="env-stage flex h-full w-full items-center justify-center">
           <div className="envelope">
