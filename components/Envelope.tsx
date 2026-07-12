@@ -109,19 +109,24 @@ export function Envelope() {
         )
         .to(q(".env-letter-sheen"), { opacity: 0, duration: 0.3 }, 3.85)
         .to(q(".env-letter-body"), { autoAlpha: 1, duration: 0.6 }, 3.3)
-        // 6 — Camera draws closer; pocket + flap recede so the card is clean
-        .to(q(".envelope"), { scale: 1.42, y: 0, duration: 1.6 }, 3.8)
+        // 6 — Camera draws closer; pocket + flap recede so the card is clean.
+        // A touch of downward drift keeps the emerged card centered rather than
+        // riding up against the top of the viewport.
+        .to(q(".envelope"), { scale: 1.2, y: 70, duration: 1.6 }, 3.8)
         .to(
           q(".env-front, .env-flap, .env-shadow, .env-back"),
           { autoAlpha: 0, duration: 1 },
           4.0
-        );
+        )
+        // 7 — Hold the fully-open card centered so a little more scroll doesn't
+        // whisk it out of view before it's been read.
+        .to({}, { duration: 1.6 }, 5.4);
     },
     { scope: root }
   );
 
   return (
-    <div ref={root} className="relative h-[220vh] w-full">
+    <div ref={root} className="relative h-[255vh] w-full">
       <div className="env-pin relative flex h-[100svh] w-full items-center justify-center overflow-hidden">
         <div className="env-stage flex h-full w-full items-center justify-center">
           <div className="envelope">
