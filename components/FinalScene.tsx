@@ -188,13 +188,15 @@ export function FinalScene() {
       {/* Drifting leaves over the sky */}
       <FloatingPetals count={12} className="text-sage/85" />
 
-      {/* Closing message + RSVP */}
-      <div className="relative z-10 mb-[8vh] flex flex-col items-center px-6 text-center">
-        <h2 className="final-reveal display max-w-[16ch] text-balance text-[clamp(1.9rem,5vw,3.4rem)] leading-tight text-ink">
-          {closing}
-        </h2>
-        <span className="final-reveal rule-h mt-10 w-24" />
-        <p className="final-reveal eyebrow mt-10 text-ink-soft/70">RSVP</p>
+      {/* Closing message lifted into the sky, among the drifting petals. */}
+      <h2 className="final-reveal display absolute left-1/2 top-[16vh] z-10 max-w-[16ch] -translate-x-1/2 text-balance px-6 text-center text-[clamp(1.9rem,5vw,3.4rem)] leading-tight text-ink">
+        {closing}
+      </h2>
+
+      {/* RSVP resting low, over the water. */}
+      <div className="relative z-10 mb-[7vh] flex flex-col items-center px-6 text-center">
+        <span className="final-reveal rule-h w-24" />
+        <p className="final-reveal eyebrow mt-8 text-ink-soft/70">RSVP</p>
         <p className="final-reveal mt-3 text-sm text-ink-soft">{rsvp.name}</p>
         <a
           href={`tel:${tel}`}
