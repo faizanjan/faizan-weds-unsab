@@ -47,23 +47,23 @@ export function SmoothScrollProvider({
     gsap.ticker.lagSmoothing(0);
 
     // --- One-gesture-per-section controller -------------------------------
-    const DURATION = 0.9; // seconds per section transition
-    const COOLDOWN = 220; // ms of quiet before another gesture is accepted
+    const DURATION = 0.8; // seconds per section transition
+    const REARM = 90; // ms of settle after the glide before the next gesture
     const SWIPE = 40; // px of travel before a touch counts as a swipe
 
+    // Locked only for the length of one glide. Crucially, incoming events do
+    // NOT extend the lock — otherwise continuous scrolling would keep it held
+    // forever and the page would appear stuck after a single step.
     let locked = false;
-    let unlockTimer = 0;
-
-    const releaseAfterQuiet = () => {
-      window.clearTimeout(unlockTimer);
-      unlockTimer = window.setTimeout(() => {
-        locked = false;
-      }, COOLDOWN);
-    };
+    let lockTimer = 0;
 
     const glideTo = (y: number) => {
       locked = true;
-      lenis.scrollTo(y, { duration: DURATION, onComplete: releaseAfterQuiet });
+      window.clearTimeout(lockTimer);
+      lockTimer = window.setTimeout(() => {
+        locked = false;
+      }, DURATION * 1000 + REARM);
+      lenis.scrollTo(y, { duration: DURATION });
     };
 
     interface Stop {
@@ -119,11 +119,7 @@ export function SmoothScrollProvider({
     const onWheel = (e: WheelEvent) => {
       if (e.ctrlKey) return; // let pinch-zoom through
       e.preventDefault();
-      if (locked) {
-        releaseAfterQuiet(); // inertia keeps the lock alive until it stops
-        return;
-      }
-      if (Math.abs(e.deltaY) < 4) return;
+      if (locked || Math.abs(e.deltaY) < 1) return;
       step(e.deltaY > 0 ? 1 : -1);
     };
 
@@ -161,7 +157,7 @@ export function SmoothScrollProvider({
 
     return () => {
       gsap.ticker.remove(raf);
-      window.clearTimeout(unlockTimer);
+      window.clearTimeout(lockTimer);
       window.removeEventListener("wheel", onWheel);
       window.removeEventListener("touchstart", onTouchStart);
       window.removeEventListener("touchmove", onTouchMove);
