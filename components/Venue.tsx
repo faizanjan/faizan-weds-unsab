@@ -40,7 +40,7 @@ export function Venue() {
   return (
     <section
       ref={root}
-      className="relative w-full px-5 py-28 pb-16 sm:px-8 sm:py-36 sm:pb-24"
+      className="relative flex min-h-[100svh] w-full items-center px-5 py-24 sm:px-8"
       aria-label="Venue"
     >
       <div className="mx-auto max-w-3xl text-center">

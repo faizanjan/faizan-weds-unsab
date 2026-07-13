@@ -62,6 +62,7 @@ export function Invitation() {
   return (
     <section
       ref={root}
+      id="invitation"
       className="relative flex min-h-[100svh] w-full items-center justify-center px-5 py-24 sm:px-8"
       aria-label="The invitation"
     >

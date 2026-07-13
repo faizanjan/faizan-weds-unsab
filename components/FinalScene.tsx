@@ -59,7 +59,7 @@ export function FinalScene() {
   return (
     <section
       ref={root}
-      className="relative flex min-h-[72svh] w-full flex-col items-center justify-end overflow-hidden"
+      className="relative flex min-h-[100svh] w-full flex-col items-center justify-end overflow-hidden"
       aria-label="Closing"
     >
       {/* Watercolour landscape */}

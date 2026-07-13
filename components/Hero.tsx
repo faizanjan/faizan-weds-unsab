@@ -3,8 +3,10 @@
 import { useRef } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { EASE } from "@/lib/animations";
+import { smoothScrollTo } from "@/lib/smoothScroll";
 import { Particles } from "@/components/Particles";
 import { HangingLights } from "@/components/HangingLights";
+import { Seal } from "@/components/Seal";
 import { invitation } from "@/data/invitation";
 import { useInviteParams } from "@/lib/useInviteParams";
 
@@ -17,6 +19,17 @@ export function Hero() {
   const root = useRef<HTMLElement>(null);
   const [first, second] = invitation.couple;
   const { guestName } = useInviteParams();
+
+  // The seal is a shortcut, not a gate — it simply carries the reader on to
+  // the invitation. Plain scrolling gets there too. We resolve an absolute
+  // document offset rather than passing the element, so the landing point is
+  // deterministic regardless of the reader's current scroll position.
+  const openInvitation = () => {
+    const target = document.getElementById("invitation");
+    if (!target) return;
+    const top = target.getBoundingClientRect().top + window.scrollY;
+    smoothScrollTo(top);
+  };
 
   useGSAP(
     () => {
@@ -40,9 +53,9 @@ export function Hero() {
         )
         .from(".hero-tagline", { autoAlpha: 0, y: 18, duration: 1 }, "-=0.8")
         .from(
-          ".hero-scroll",
+          ".hero-cue",
           { autoAlpha: 0, y: 12, duration: 1 },
-          "-=0.6"
+          "-=0.5"
         );
 
       // Departure — parallax fade as the envelope scene takes over.
@@ -94,12 +107,12 @@ export function Hero() {
           <p className="hero-eyebrow eyebrow mb-10">The Wedding Of</p>
         )}
 
-        <h1 className="display flex flex-col items-center text-ink">
+        <h1 className="display flex flex-col items-center leading-none text-ink">
           <span className="hero-name text-[clamp(3rem,11vw,8.5rem)]">
             {first}
           </span>
           <span
-            className="hero-amp font-script my-[0.08em] text-[clamp(2.2rem,6.5vw,4.6rem)] text-gold"
+            className="hero-amp font-script my-[0.14em] text-[clamp(2.2rem,6.5vw,4.6rem)] leading-none text-gold"
             aria-hidden="true"
           >
             {invitation.conjunction}
@@ -109,29 +122,15 @@ export function Hero() {
           </span>
         </h1>
 
-        <p className="hero-tagline lede mt-12 max-w-sm text-sm tracking-wide">
+        <p className="hero-tagline lede mt-10 max-w-sm text-sm tracking-wide">
           {invitation.tagline}
         </p>
 
-        <div className="hero-scroll absolute bottom-10 flex flex-col items-center gap-3">
-          <span className="sr-only">Scroll down</span>
-          <span className="relative flex h-12 w-[1px] overflow-hidden bg-gold/30">
-            <span className="scroll-bead absolute left-0 top-0 h-3 w-full bg-gold" />
+        <div className="hero-cue mt-14 flex flex-col items-center gap-3">
+          <Seal onOpen={openInvitation} />
+          <span className="eyebrow text-[0.55rem] tracking-[0.35em] text-ink-soft/80">
+            Tap or scroll
           </span>
-          <svg
-            className="scroll-cue h-4 w-4 text-gold/80"
-            viewBox="0 0 24 24"
-            fill="none"
-            aria-hidden="true"
-          >
-            <path
-              d="M5 8.5l7 7 7-7"
-              stroke="currentColor"
-              strokeWidth="1.4"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
         </div>
       </div>
     </section>
