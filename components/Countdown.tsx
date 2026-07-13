@@ -7,7 +7,7 @@ import { EASE } from "@/lib/animations";
 import { invitation } from "@/data/invitation";
 import { Fireworks } from "@/components/Fireworks";
 import { FloralDivider } from "@/components/ornaments/FloralDivider";
-import couple from "../public/couple.jpg";
+import couple from "../assets/couple.png";
 
 interface TimeLeft {
   days: number;
@@ -82,8 +82,8 @@ export function Countdown() {
       className="relative flex min-h-[100svh] w-full flex-col items-center justify-start px-6 pb-16 pt-[13vh]"
       aria-label="Countdown to the celebration"
     >
-      {/* The couple, as a soft backdrop the celebration counts down to. White
-          ground drops away under multiply, leaving just the figures. */}
+      {/* The couple, as a soft backdrop the celebration counts down to. The
+          background is cut out, so the figures sit straight on the page. */}
       <div className="pointer-events-none absolute inset-0 z-0 flex items-end justify-center overflow-hidden">
         <div className="relative h-[80%] w-full max-w-sm">
           <Image
@@ -91,7 +91,7 @@ export function Countdown() {
             alt=""
             fill
             sizes="(max-width: 640px) 90vw, 384px"
-            className="object-contain object-bottom opacity-40 mix-blend-multiply"
+            className="object-contain object-bottom opacity-50"
           />
         </div>
       </div>
