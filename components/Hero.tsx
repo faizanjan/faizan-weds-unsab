@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { EASE } from "@/lib/animations";
 import { smoothScrollTo } from "@/lib/smoothScroll";
@@ -30,6 +30,40 @@ export function Hero() {
     const top = target.getBoundingClientRect().top + window.scrollY;
     smoothScrollTo(top);
   };
+
+  // If the reader lingers on the hero without touching anything, carry them
+  // into the invitation after a beat — but never yank someone who's already
+  // begun exploring, so any wheel/touch/key/pointer input cancels it.
+  useEffect(() => {
+    let cancelled = false;
+
+    const timer = window.setTimeout(() => {
+      if (cancelled) return;
+      const target = document.getElementById("invitation");
+      if (target) {
+        smoothScrollTo(target.getBoundingClientRect().top + window.scrollY);
+      }
+    }, 12000);
+
+    const cancel = () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+    };
+
+    const opts: AddEventListenerOptions = { passive: true, once: true };
+    window.addEventListener("wheel", cancel, opts);
+    window.addEventListener("touchstart", cancel, opts);
+    window.addEventListener("pointerdown", cancel, opts);
+    window.addEventListener("keydown", cancel, { once: true });
+
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener("wheel", cancel);
+      window.removeEventListener("touchstart", cancel);
+      window.removeEventListener("pointerdown", cancel);
+      window.removeEventListener("keydown", cancel);
+    };
+  }, []);
 
   useGSAP(
     () => {
@@ -78,6 +112,7 @@ export function Hero() {
   return (
     <section
       ref={root}
+      data-snap
       className="relative h-[100svh] w-full overflow-hidden"
       aria-label="Wedding invitation — Faizan and Unsab"
     >
@@ -112,7 +147,7 @@ export function Hero() {
             {first}
           </span>
           <span
-            className="hero-amp font-script my-[0.14em] text-[clamp(2.2rem,6.5vw,4.6rem)] leading-none text-gold"
+            className="hero-amp font-script mt-[0.3em] mb-[0.12em] text-[clamp(2.2rem,6.5vw,4.6rem)] leading-none text-gold"
             aria-hidden="true"
           >
             {invitation.conjunction}
@@ -126,11 +161,8 @@ export function Hero() {
           {invitation.tagline}
         </p>
 
-        <div className="hero-cue mt-14 flex flex-col items-center gap-3">
+        <div className="hero-cue mt-16 flex flex-col items-center">
           <Seal onOpen={openInvitation} />
-          <span className="eyebrow text-[0.55rem] tracking-[0.35em] text-ink-soft/80">
-            Tap or scroll
-          </span>
         </div>
       </div>
     </section>

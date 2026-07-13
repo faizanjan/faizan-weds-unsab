@@ -5,7 +5,6 @@ import { gsap, useGSAP } from "@/lib/gsap";
 import { EASE } from "@/lib/animations";
 import { invitation } from "@/data/invitation";
 import { Fireworks } from "@/components/Fireworks";
-import { Confetti } from "@/components/Confetti";
 import { FloralDivider } from "@/components/ornaments/FloralDivider";
 
 interface TimeLeft {
@@ -77,14 +76,12 @@ export function Countdown() {
   return (
     <section
       ref={root}
+      data-snap
       className="relative flex min-h-[100svh] w-full flex-col items-center justify-center px-6 py-24"
       aria-label="Countdown to the celebration"
     >
       <div className="pointer-events-none absolute inset-0 opacity-80">
         <Fireworks />
-      </div>
-      <div className="pointer-events-none absolute inset-0">
-        <Confetti />
       </div>
 
       <div className="relative z-10 mx-auto flex max-w-3xl flex-col items-center text-center">

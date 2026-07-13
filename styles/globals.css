@@ -175,10 +175,27 @@ html.lenis body {
   border: 0;
   background: transparent;
   cursor: pointer;
-  transition: transform 0.3s ease, filter 0.3s ease;
+  transition: filter 0.3s ease;
+  /* a periodic little hop — a wordless "tap me" */
+  animation: seal-blip 2.6s ease-in-out infinite;
 }
-.hero-seal:active {
-  transform: scale(0.94);
+@keyframes seal-blip {
+  0%,
+  80%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  87% {
+    transform: translateY(-5px) scale(1.05);
+  }
+  93% {
+    transform: translateY(0) scale(1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-seal {
+    animation: none;
+  }
 }
 .hero-seal:focus-visible {
   outline: 2px solid rgba(200, 169, 106, 0.6);

@@ -40,6 +40,7 @@ export function Venue() {
   return (
     <section
       ref={root}
+      data-snap
       className="relative flex min-h-[100svh] w-full items-center px-5 py-24 sm:px-8"
       aria-label="Venue"
     >

@@ -5,6 +5,7 @@ import { gsap, useGSAP } from "@/lib/gsap";
 import { EASE } from "@/lib/animations";
 import { invitation } from "@/data/invitation";
 import { useInviteParams } from "@/lib/useInviteParams";
+import { Confetti } from "@/components/Confetti";
 import { FloralCorner } from "@/components/ornaments/FloralCorner";
 import { FloralDivider } from "@/components/ornaments/FloralDivider";
 
@@ -66,6 +67,10 @@ export function Invitation() {
       className="relative flex min-h-[100svh] w-full items-center justify-center px-5 py-24 sm:px-8"
       aria-label="The invitation"
     >
+      <div className="pointer-events-none absolute inset-0 z-20">
+        <Confetti />
+      </div>
+
       <article className="invite-card paper-grain relative w-full max-w-2xl overflow-hidden rounded-[3px] bg-paper px-6 py-16 text-center shadow-[var(--shadow-paper)] sm:px-16 sm:py-24">
         {/* Embossed inner frame */}
         <span className="pointer-events-none absolute inset-3 rounded-[2px] border border-gold/30 sm:inset-5" />

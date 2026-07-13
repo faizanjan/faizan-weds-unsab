@@ -59,6 +59,7 @@ export function FinalScene() {
   return (
     <section
       ref={root}
+      data-snap
       className="relative flex min-h-[100svh] w-full flex-col items-center justify-end overflow-hidden"
       aria-label="Closing"
     >
