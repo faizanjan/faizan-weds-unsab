@@ -2,14 +2,18 @@
 
 import { useEffect } from "react";
 import Lenis from "lenis";
-import Snap from "lenis/snap";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { registerLenis } from "@/lib/smoothScroll";
 
 /**
- * Wraps the app in Lenis smooth scrolling and drives GSAP's ScrollTrigger
- * from Lenis' RAF loop, so scrubbed timelines stay perfectly in sync with
- * the eased scroll position.
+ * Owns scrolling for the whole page. Lenis provides the eased programmatic
+ * scroll and drives GSAP's ScrollTrigger, but wheel/touch/keys are handled
+ * here as discrete gestures: one gesture advances at most one section, so the
+ * page always moves a whole scene at a time and never flies past several.
+ *
+ * The tall invitation (any section without `data-snap`) is the exception — it
+ * steps through in viewport-sized chunks so its lower content stays reachable,
+ * but a single gesture still never crosses out of it into the next section.
  */
 export function SmoothScrollProvider({
   children,
@@ -26,54 +30,146 @@ export function SmoothScrollProvider({
       return;
     }
 
+    // Lenis animates programmatic scrolls and syncs ScrollTrigger; its own
+    // wheel/touch smoothing is off because the controller below owns input.
     const lenis = new Lenis({
-      duration: 1.15,
-      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: true,
-      touchMultiplier: 1.4,
-      wheelMultiplier: 1,
+      smoothWheel: false,
+      touchMultiplier: 0,
     });
 
     registerLenis(lenis);
     lenis.on("scroll", ScrollTrigger.update);
 
     const raf = (time: number) => {
-      // Lenis expects milliseconds
-      lenis.raf(time * 1000);
+      lenis.raf(time * 1000); // Lenis expects milliseconds
     };
     gsap.ticker.add(raf);
     gsap.ticker.lagSmoothing(0);
 
-    // Snap each full-height section to the top of the viewport, so the reader
-    // always lands on a whole scene rather than the seam between two. Proximity
-    // (not mandatory) keeps the taller, freely-read invitation scrollable — it
-    // only pulls in when a section top is genuinely near.
-    const snap = new Snap(lenis, {
-      type: "proximity",
-      distanceThreshold: "55%",
-      duration: 0.9,
-    });
-    const sections = Array.from(
-      document.querySelectorAll<HTMLElement>("main > section[data-snap]")
-    );
-    const removeSnaps = sections.map((section) =>
-      snap.addElement(section, { align: "start" })
-    );
+    // --- One-gesture-per-section controller -------------------------------
+    const DURATION = 0.9; // seconds per section transition
+    const COOLDOWN = 220; // ms of quiet before another gesture is accepted
+    const SWIPE = 40; // px of travel before a touch counts as a swipe
+
+    let locked = false;
+    let unlockTimer = 0;
+
+    const releaseAfterQuiet = () => {
+      window.clearTimeout(unlockTimer);
+      unlockTimer = window.setTimeout(() => {
+        locked = false;
+      }, COOLDOWN);
+    };
+
+    const glideTo = (y: number) => {
+      locked = true;
+      lenis.scrollTo(y, { duration: DURATION, onComplete: releaseAfterQuiet });
+    };
+
+    interface Stop {
+      top: number;
+      height: number;
+      snap: boolean;
+    }
+
+    const stops = (): Stop[] =>
+      Array.from(
+        document.querySelectorAll<HTMLElement>("main > section")
+      ).map((el) => ({
+        top: Math.round(el.getBoundingClientRect().top + window.scrollY),
+        height: el.offsetHeight,
+        snap: el.hasAttribute("data-snap"),
+      }));
+
+    // Move one step in `dir` (+1 down, -1 up) from the current position.
+    const step = (dir: number) => {
+      const list = stops();
+      const vh = window.innerHeight;
+      const y = window.scrollY;
+
+      let idx = 0;
+      for (let i = 0; i < list.length; i++) {
+        if (y >= list[i].top - 2) idx = i;
+      }
+      const cur = list[idx];
+      const maxInternal = cur.top + cur.height - vh; // keeps `cur` filling
+
+      // A tall, freely-read section steps within itself before handing off.
+      if (!cur.snap) {
+        if (dir > 0 && y < maxInternal - 2) {
+          glideTo(Math.min(y + vh * 0.9, maxInternal));
+          return;
+        }
+        if (dir < 0 && y > cur.top + 2) {
+          glideTo(Math.max(y - vh * 0.9, cur.top));
+          return;
+        }
+      }
+
+      const nextIdx = Math.min(list.length - 1, Math.max(0, idx + dir));
+      if (nextIdx === idx) return;
+      const dest = list[nextIdx];
+      // Enter a section top-first going down, bottom-first coming up, so tall
+      // sections reveal from the edge you're arriving from.
+      const target =
+        dir > 0 ? dest.top : dest.top + Math.max(0, dest.height - vh);
+      glideTo(target);
+    };
+
+    const onWheel = (e: WheelEvent) => {
+      if (e.ctrlKey) return; // let pinch-zoom through
+      e.preventDefault();
+      if (locked) {
+        releaseAfterQuiet(); // inertia keeps the lock alive until it stops
+        return;
+      }
+      if (Math.abs(e.deltaY) < 4) return;
+      step(e.deltaY > 0 ? 1 : -1);
+    };
+
+    let touchStartY = 0;
+    const onTouchStart = (e: TouchEvent) => {
+      touchStartY = e.touches[0].clientY;
+    };
+    const onTouchMove = (e: TouchEvent) => {
+      e.preventDefault(); // we own vertical movement
+    };
+    const onTouchEnd = (e: TouchEvent) => {
+      if (locked) return;
+      const delta = touchStartY - e.changedTouches[0].clientY;
+      if (Math.abs(delta) < SWIPE) return;
+      step(delta > 0 ? 1 : -1);
+    };
+
+    const onKey = (e: KeyboardEvent) => {
+      const down = ["ArrowDown", "PageDown"].includes(e.key);
+      const up = ["ArrowUp", "PageUp"].includes(e.key);
+      if (!down && !up) return;
+      e.preventDefault();
+      if (!locked) step(down ? 1 : -1);
+    };
+
+    window.addEventListener("wheel", onWheel, { passive: false });
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("touchmove", onTouchMove, { passive: false });
+    window.addEventListener("touchend", onTouchEnd, { passive: true });
+    window.addEventListener("keydown", onKey);
 
     // Recalculate triggers once fonts/images settle layout
-    const refresh = () => {
-      ScrollTrigger.refresh();
-      snap.resize();
-    };
+    const refresh = () => ScrollTrigger.refresh();
     window.addEventListener("load", refresh);
 
     return () => {
       gsap.ticker.remove(raf);
-      removeSnaps.forEach((remove) => remove());
-      snap.destroy();
+      window.clearTimeout(unlockTimer);
+      window.removeEventListener("wheel", onWheel);
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("touchend", onTouchEnd);
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("load", refresh);
       registerLenis(null);
       lenis.destroy();
-      window.removeEventListener("load", refresh);
     };
   }, []);
 
