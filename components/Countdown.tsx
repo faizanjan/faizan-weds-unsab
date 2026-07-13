@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { EASE } from "@/lib/animations";
 import { invitation } from "@/data/invitation";
 import { Fireworks } from "@/components/Fireworks";
 import { FloralDivider } from "@/components/ornaments/FloralDivider";
+import couple from "../public/couple.jpg";
 
 interface TimeLeft {
   days: number;
@@ -77,10 +79,24 @@ export function Countdown() {
     <section
       ref={root}
       data-snap
-      className="relative flex min-h-[100svh] w-full flex-col items-center justify-center px-6 py-24"
+      className="relative flex min-h-[100svh] w-full flex-col items-center justify-start px-6 pb-16 pt-[13vh]"
       aria-label="Countdown to the celebration"
     >
-      <div className="pointer-events-none absolute inset-0 opacity-80">
+      {/* The couple, as a soft backdrop the celebration counts down to. White
+          ground drops away under multiply, leaving just the figures. */}
+      <div className="pointer-events-none absolute inset-0 z-0 flex items-end justify-center overflow-hidden">
+        <div className="relative h-[80%] w-full max-w-sm">
+          <Image
+            src={couple}
+            alt=""
+            fill
+            sizes="(max-width: 640px) 90vw, 384px"
+            className="object-contain object-bottom opacity-40 mix-blend-multiply"
+          />
+        </div>
+      </div>
+
+      <div className="pointer-events-none absolute inset-0 z-[1] opacity-80">
         <Fireworks />
       </div>
 
