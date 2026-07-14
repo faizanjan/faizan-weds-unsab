@@ -82,10 +82,10 @@ export function Particles({
         kind: "spark",
         x: Math.random() * width,
         y: Math.random() * height,
-        r: Math.random() * 1.4 + 1.1,
+        r: Math.random() * 1.6 + 1.6,
         vx: (Math.random() - 0.5) * 0.08,
         vy: -(Math.random() * 0.1 + 0.02),
-        baseAlpha: Math.random() * 0.35 + 0.5,
+        baseAlpha: Math.random() * 0.35 + 0.65,
         twinkle: Math.random() * 0.05 + 0.03,
         phase: Math.random() * Math.PI * 2,
         sway: 0,
@@ -149,7 +149,7 @@ export function Particles({
       if (glow > 0.82) {
         const ray = m.r * 6 * (glow - 0.82) * 5;
         ctx.strokeStyle = `rgba(${GOLD}, ${a * 0.9})`;
-        ctx.lineWidth = 0.6;
+        ctx.lineWidth = 0.9;
         ctx.beginPath();
         ctx.moveTo(m.x - ray, m.y);
         ctx.lineTo(m.x + ray, m.y);

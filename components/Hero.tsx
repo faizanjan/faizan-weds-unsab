@@ -124,8 +124,8 @@ export function Hero() {
             "radial-gradient(120% 90% at 12% 4%, rgba(255,247,228,0.9) 0%, rgba(247,243,237,0.4) 42%, rgba(247,243,237,0) 70%)",
         }}
       />
-      <div className="pointer-events-none absolute inset-0 opacity-70">
-        <Particles density={0.9} sparkles={14} hearts={6} />
+      <div className="pointer-events-none absolute inset-0 opacity-90">
+        <Particles density={0.9} sparkles={20} hearts={6} />
       </div>
 
       <HangingLights />
