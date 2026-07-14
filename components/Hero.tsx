@@ -130,10 +130,10 @@ export function Hero() {
 
       <HangingLights />
 
-      <div className="hero-content relative z-10 flex h-full flex-col items-center justify-center px-6 text-center">
+      <div className="hero-content relative z-10 flex h-full flex-col items-center justify-center px-6 pt-[5vh] text-center">
         {guestName ? (
-          <div className="hero-eyebrow mb-10 flex flex-col items-center">
-            <p className="font-script text-3xl text-gold-deep sm:text-4xl">
+          <div className="hero-eyebrow mb-8 flex flex-col items-center">
+            <p className="font-script text-4xl text-gold-deep sm:text-5xl">
               Dear {guestName},
             </p>
             <p className="eyebrow mt-4">you are invited to the wedding of</p>
@@ -142,17 +142,17 @@ export function Hero() {
           <p className="hero-eyebrow eyebrow mb-10">The Wedding Of</p>
         )}
 
-        <h1 className="display flex flex-col items-center leading-none text-ink">
-          <span className="hero-name text-[clamp(3rem,11vw,8.5rem)]">
+        <h1 className="font-script flex flex-col items-center leading-none text-ink">
+          <span className="hero-name text-[clamp(3.6rem,13vw,9.5rem)] leading-none">
             {first}
           </span>
           <span
-            className="hero-amp font-script mt-[0.3em] mb-[0.12em] text-[clamp(2.2rem,6.5vw,4.6rem)] leading-none text-gold"
+            className="hero-amp my-[0.02em] text-[clamp(2.8rem,8vw,5.5rem)] leading-none text-gold"
             aria-hidden="true"
           >
             {invitation.conjunction}
           </span>
-          <span className="hero-name text-[clamp(3rem,11vw,8.5rem)]">
+          <span className="hero-name text-[clamp(3.6rem,13vw,9.5rem)] leading-none">
             {second}
           </span>
         </h1>
@@ -161,7 +161,7 @@ export function Hero() {
           {invitation.tagline}
         </p>
 
-        <div className="hero-cue mt-16 flex flex-col items-center">
+        <div className="hero-cue mt-12 flex flex-col items-center">
           <Seal onOpen={openInvitation} />
         </div>
       </div>
