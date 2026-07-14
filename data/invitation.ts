@@ -83,8 +83,8 @@ export const invitation: Invitation = {
     groom: {
       addressLines: ["Ziethyar, Nishat", "Srinagar, J&K"],
       mapsEmbedUrl:
-        "https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d648.3379576837558!2d74.88477008173105!3d34.12137781298244!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMzTCsDA3JzE2LjIiTiA3NMKwNTMnMDguNyJF!5e0!3m2!1sen!2sin!4v1783601594708!5m2!1sen!2sin",
-      mapsLink: "https://maps.google.com/?q=34.12137781298244,74.88477008173105",
+        "https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d624.8203291715438!2d74.8853257805876!3d34.121099829973765!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e1!3m2!1sen!2sin!4v1784016781703!5m2!1sen!2sin",
+      mapsLink: "https://maps.google.com/?q=34.121099829973765,74.8853257805876",
       rsvp: { name: "Jibran Jan", phone: "+91 91031 71780" },
     },
     bride: {

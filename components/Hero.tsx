@@ -130,10 +130,10 @@ export function Hero() {
 
       <HangingLights />
 
-      <div className="hero-content relative z-10 flex h-full flex-col items-center justify-center px-6 pt-[8vh] text-center">
+      <div className="hero-content relative z-10 flex h-full flex-col items-center justify-center px-6 pt-[4vh] text-center">
         {guestName ? (
-          <div className="hero-eyebrow mb-12 flex flex-col items-center">
-            <p className="font-script text-[2.75rem] leading-[1.15] text-gold-deep sm:text-6xl">
+          <div className="hero-eyebrow mb-8 flex flex-col items-center">
+            <p className="hero-name font-script text-[clamp(2.85rem,9.5vw,7.2rem)] leading-[1.05] text-gold-deep">
               Dear {guestName},
             </p>
             <p className="eyebrow mt-6">you are invited to the wedding of</p>
@@ -157,11 +157,11 @@ export function Hero() {
           </span>
         </h1>
 
-        <p className="hero-tagline lede mt-10 max-w-sm text-sm tracking-wide">
+        <p className="hero-tagline lede mt-8 max-w-sm text-sm tracking-wide">
           {invitation.tagline}
         </p>
 
-        <div className="hero-cue mt-12 flex flex-col items-center">
+        <div className="hero-cue mt-8 flex flex-col items-center">
           <Seal onOpen={openInvitation} />
         </div>
       </div>
