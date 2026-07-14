@@ -130,29 +130,29 @@ export function Hero() {
 
       <HangingLights />
 
-      <div className="hero-content relative z-10 flex h-full flex-col items-center justify-center px-6 pt-[5vh] text-center">
+      <div className="hero-content relative z-10 flex h-full flex-col items-center justify-center px-6 pt-[8vh] text-center">
         {guestName ? (
-          <div className="hero-eyebrow mb-8 flex flex-col items-center">
-            <p className="font-script text-4xl text-gold-deep sm:text-5xl">
+          <div className="hero-eyebrow mb-12 flex flex-col items-center">
+            <p className="font-script text-[2.75rem] leading-[1.15] text-gold-deep sm:text-6xl">
               Dear {guestName},
             </p>
-            <p className="eyebrow mt-4">you are invited to the wedding of</p>
+            <p className="eyebrow mt-6">you are invited to the wedding of</p>
           </div>
         ) : (
           <p className="hero-eyebrow eyebrow mb-10">The Wedding Of</p>
         )}
 
         <h1 className="font-script flex flex-col items-center leading-none text-ink">
-          <span className="hero-name text-[clamp(3.6rem,13vw,9.5rem)] leading-none">
+          <span className="hero-name text-[clamp(3rem,10vw,7.5rem)] leading-none">
             {first}
           </span>
           <span
-            className="hero-amp my-[0.02em] text-[clamp(2.8rem,8vw,5.5rem)] leading-none text-gold"
+            className="hero-amp my-[0.02em] text-[clamp(2.2rem,6vw,4.2rem)] leading-none text-gold"
             aria-hidden="true"
           >
             {invitation.conjunction}
           </span>
-          <span className="hero-name text-[clamp(3.6rem,13vw,9.5rem)] leading-none">
+          <span className="hero-name text-[clamp(3rem,10vw,7.5rem)] leading-none">
             {second}
           </span>
         </h1>
