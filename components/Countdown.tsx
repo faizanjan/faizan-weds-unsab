@@ -79,19 +79,19 @@ export function Countdown() {
     <section
       ref={root}
       data-snap
-      className="relative flex min-h-[100svh] w-full flex-col items-center justify-start px-6 pb-16 pt-[13vh]"
+      className="relative flex min-h-[100svh] w-full flex-col items-center justify-center px-6 py-24"
       aria-label="Countdown to the celebration"
     >
       {/* The couple, as a soft backdrop the celebration counts down to. The
           background is cut out, so the figures sit straight on the page. */}
-      <div className="pointer-events-none absolute inset-0 z-0 flex items-end justify-center overflow-hidden">
-        <div className="relative h-[80%] w-full max-w-sm">
+      <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center overflow-hidden">
+        <div className="relative h-full w-full max-w-md">
           <Image
             src={couple}
             alt=""
             fill
-            sizes="(max-width: 640px) 90vw, 384px"
-            className="object-contain object-bottom opacity-50"
+            sizes="(max-width: 640px) 90vw, 448px"
+            className="object-contain opacity-[0.18]"
           />
         </div>
       </div>
