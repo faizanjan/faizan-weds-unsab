@@ -50,7 +50,7 @@ export function Venue() {
           At Their Residence
         </h2>
         <p className="venue-reveal lede mt-6">
-          The celebration will be at their residence
+          We&rsquo;d be delighted to welcome you to the family home.
         </p>
         <div className="venue-reveal mt-4 space-y-1 text-ink-soft">
           {host.addressLines.map((line) => (
