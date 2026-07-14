@@ -193,16 +193,8 @@ export function FinalScene() {
         {closing}
       </h2>
 
-      {/* RSVP resting low, over the water — a soft glow lifts it off the
-          watercolour so the whole block stays legible. */}
-      <div className="relative z-10 mb-[12vh] flex flex-col items-center px-10 py-6 text-center">
-        <div
-          className="pointer-events-none absolute inset-0 -z-10"
-          style={{
-            background:
-              "radial-gradient(65% 72% at 50% 52%, rgba(247,243,237,0.92) 0%, rgba(247,243,237,0.55) 45%, rgba(247,243,237,0) 78%)",
-          }}
-        />
+      {/* RSVP resting low, over the water. */}
+      <div className="relative z-10 mb-[12vh] flex flex-col items-center px-6 text-center">
         <span className="final-reveal rule-h w-24" />
         <p
           className="final-reveal eyebrow mt-8"
