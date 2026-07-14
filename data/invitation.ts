@@ -83,8 +83,8 @@ export const invitation: Invitation = {
     groom: {
       addressLines: ["Ziethyar, Nishat", "Srinagar, J&K"],
       mapsEmbedUrl:
-        "https://maps.google.com/maps?q=34.121099829973765,74.8853257805876&z=18&t=h&hl=en&output=embed",
-      mapsLink: "https://maps.google.com/?q=34.121099829973765,74.8853257805876",
+        "https://maps.google.com/maps?q=34.121189829973765,74.8857587805876&z=18&t=h&hl=en&output=embed",
+      mapsLink: "https://maps.google.com/?q=34.121189829973765,74.8857587805876",
       rsvp: { name: "Jibran Jan", phone: "+91 91031 71780" },
     },
     bride: {
