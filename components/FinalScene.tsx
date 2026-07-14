@@ -194,9 +194,14 @@ export function FinalScene() {
       </h2>
 
       {/* RSVP resting low, over the water. */}
-      <div className="relative z-10 mb-[7vh] flex flex-col items-center px-6 text-center">
+      <div className="relative z-10 mb-[12vh] flex flex-col items-center px-6 text-center">
         <span className="final-reveal rule-h w-24" />
-        <p className="final-reveal eyebrow mt-8 text-ink-soft/70">RSVP</p>
+        <p
+          className="final-reveal eyebrow mt-8"
+          style={{ color: "#8a6a2e", fontSize: "0.85rem" }}
+        >
+          RSVP
+        </p>
         <p className="final-reveal mt-3 text-sm text-ink-soft">{rsvp.name}</p>
         <a
           href={`tel:${tel}`}
