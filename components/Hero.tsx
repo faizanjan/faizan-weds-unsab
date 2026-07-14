@@ -133,7 +133,7 @@ export function Hero() {
       <div className="hero-content relative z-10 flex h-full flex-col items-center justify-center px-6 text-center">
         {guestName ? (
           <div className="hero-eyebrow mb-10 flex flex-col items-center">
-            <p className="font-script text-3xl text-gold sm:text-4xl">
+            <p className="font-script text-3xl text-gold-deep sm:text-4xl">
               Dear {guestName},
             </p>
             <p className="eyebrow mt-4">you are invited to the wedding of</p>
